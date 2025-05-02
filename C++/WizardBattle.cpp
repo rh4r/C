@@ -4,10 +4,10 @@
 #include <stdlib.h> // Sleep function (takes input in miliseconds, so 2000 = 2 seconds)
 #include <vector> // Array functionality
 #include <map> // Dictionary / Table functionality
+#include <cstdlib> // Functionality for random dice
 using namespace std;
+using stringdict = vector<string>;
 
-const vector<string> StoredWizards;
-const string BattleWinner;
 const string Banner = R"(
 ██╗    ██╗██╗███████╗ █████╗ ██████╗ ██████╗      ██╗ ██████╗  ██╗
 ██║    ██║██║╚══███╔╝██╔══██╗██╔══██╗██╔══██╗    ███║██╔═████╗███║
@@ -26,40 +26,61 @@ class Wizard {
   string Element;
 };
 
-void PrintArray(array){
-  int Count = 1
+using wizardarray = vector<Wizard>;
 
-  for (int index; index <= sizeof(array); index++){
-    cout << Count << " " << index;
+wizardarray StoredWizards;
+stringdict Elements = {"Earth", "Fire", "Air", "Water", "Omega"};
+string BattleWinner;
+
+int ReturnRandomInteger(){
+  int random_int;
+  srand(time(NULL));
+  random_int = rand() % 15;
+
+  return random_int;
+}
+
+void PrintArray(const stringdict& array){
+  int Count = 1;
+
+  for (int index = 0; index < array.size(); index++){
+    cout << Count << ". " << array[index] << endl;
     Count += 1;
   }
 }
 
-void CreateWizard(wizard_name, element){
-  if (wizard_name != NULL; element != NULL){
+void CreateWizard(string wizard_name, string element){
+  if (!wizard_name.empty() && !element.empty()){
     Wizard FirstWizardObject;
+    FirstWizardObject.Name = wizard_name;
+    FirstWizardObject.Element = element;
+    FirstWizardObject.Health = 100;
+    FirstWizardObject.Wisdom = ReturnRandomInteger();
+
     StoredWizards.push_back(FirstWizardObject);
   }
 }
 
-string ReturnLowerStr(inputted_string){
-  return tolower(inputted_string);
-}
 
-string ReturnLoweredStr(element){
+string ReturnLoweredStr(string element){
   string placeholder_string;
   
-  for (int index; index <= length(element);index++){
+  for (int index; index <= element.length();index++){
     char current_character = element[index];
+    cout << current_character;
 
-    if (isupper(current_char)){
+    if (isupper(current_character)){
       placeholder_string += tolower(current_character);
+    }
+    else {
+      placeholder_string += current_character;
     }
   }
   return placeholder_string;
 }
 
-string ReturnElementDisadvantage(first_element, second_element){
+
+/* string ReturnElementDisadvantage(string: first_element, string: second_element){
   string placeholder_string;
   // Fire advantages or disadvantages
   map<string, float> fire_values = {
@@ -89,22 +110,56 @@ string ReturnElementDisadvantage(first_element, second_element){
     {"earth": 1},
     {"fire": 0.5},
   };
-
   int index = 0;
   for (const auto& [key, value] : fire_values){
     cout <<  "Key: " << key << ", Value: " << value;
     ++index;
   }
 }
+*/
+
+void InitializeInputs(){
+  string name;
+  string element;
+  string is_happy;
+  bool is_running = true;
+
+  while (is_running){
+    cout << "\n\nWelcome to wizard 101!\nA game about battling wizards, enter your name to begin:";
+    cin >> name;
+    name = ReturnLoweredStr(name);
+
+    cout << "\nThank you "<< name << "! Now, select your element (NAME):\n";
+    PrintArray(Elements);
+    cin >> element;
+    element = ReturnLoweredStr(element);
+
+    cout << "\nYou have selected:\nName:" << name << "\nElement:" << element << "\nIs this correct 'Y' or 'N'?";
+    cin >> is_happy;
+    is_happy = ReturnLoweredStr(is_happy);
+
+    if (is_happy[0] = 'y'){
+      is_running = false;
+    }
+    else {
+      name = name.empty();
+      element = element.empty();
+    }
+  }
+}
+
+void BeginBattle(Wizard wizard_1, Wizard wizard_2){
+  cout << "NULL";
+}
 
 int main(){
   cout << Banner << endl;
 
-  while (sizeof(StoredWizards) < 2){
+  while (StoredWizards.size() < 2){
     InitializeInputs();
   }
 
-  BeginBattle(StoredWizards[0], StoredWizards[1]);
+  //BeginBattle(StoredWizards[0], StoredWizards[1]);
   cout << "    !! BATTLE HAD ENDED !!\n       Our winner is..." << BattleWinner;
   return 0;
 }
